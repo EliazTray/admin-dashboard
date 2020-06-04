@@ -1,18 +1,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import ExampleModule from './examples'
+import { Store } from './types'
+import examples from './examples'
+import counter from './counter'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-    state: {
-        global: {
-            loading: true
-        }
-    },
+const store: Store = new Vuex.Store({
     mutations: {},
     actions: {},
+    getters: {},
     modules: {
-        example: ExampleModule
+        examples,
+        counter
     }
 })
+
+export default store

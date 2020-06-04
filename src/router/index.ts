@@ -1,14 +1,25 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../views/Home.vue'
+import log from '@/utils/logger'
+
+const RouterLog = log.extend('VueRouter:')
 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
     {
-        path: '/',
+        path: '/:id',
         name: 'Home',
-        component: Home
+        component: Home,
+        props: ({ params, query }) => {
+            RouterLog('params: %o', params)
+            RouterLog('query: %o', query)
+            return {
+                id: params.id,
+                page: +query.page
+            }
+        }
     },
     {
         path: '/about',
