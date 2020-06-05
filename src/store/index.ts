@@ -1,22 +1,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { Store } from './types'
-import examples from './examples'
-import counter from './counter'
+import { IAppState } from './modules/app'
+import { IUserState } from './modules/user'
+import { ITagsViewState } from './modules/tags-view'
+import { IErrorLogState } from './modules/error-log'
+import { IPermissionState } from './modules/permission'
+import { ISettingsState } from './modules/settings'
 
 Vue.use(Vuex)
 
-// https://github.com/microsoft/TypeScript/issues/12754
-// 受限于 ts 暂时不支持 Augment Key during Type Mapping, 所以 namespaced 设置为 true 无法得到 action + mutation + getters 的有效推导
+export interface IRootState {
+  app: IAppState
+  user: IUserState
+  tagsView: ITagsViewState
+  errorLog: IErrorLogState
+  permission: IPermissionState
+  settings: ISettingsState
+}
 
-const store: Store = new Vuex.Store({
-    mutations: {},
-    actions: {},
-    getters: {},
-    modules: {
-        examples,
-        counter
-    }
-})
-
-export default store
+// Declare empty store first, dynamically register all modules later.
+export default new Vuex.Store<IRootState>({})
