@@ -1,25 +1,25 @@
 <template>
-    <div class="component-{{name}}">
-        <p>\{{ id }}</p>
-        <p>\{{ page }}</p>
+    <div class="component-demo">
+        <p>{{ id }}</p>
+        <p>{{ page }}</p>
     </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 
-type {{name}}State = {
+type demoState = {
     age: string
     sex: 'male' | 'female'
 }
 
 export default Vue.extend({
-    name: '{{name}}',
+    name: 'demo',
     props: {
         id: String,
         page: Number
     },
-    data(): {{name}}State {
+    data(): demoState {
         return {
             age: '1',
             sex: 'male'
@@ -36,7 +36,7 @@ export default Vue.extend({
     },
     watch: {
         age: {
-            handler(value: {{name}}State['age'], oldValue: {{name}}State['age'] | undefined) {
+            handler(value: demoState['age'], oldValue: demoState['age'] | undefined) {
                 console.log(oldValue)
                 console.log(value)
             },

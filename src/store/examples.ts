@@ -17,7 +17,7 @@ type AugmentedActionContext = {
     rootGetters: {
         [K in keyof AppGetters]: ReturnType<AppGetters[K]>
     }
-} & Pick<ActionContext<State, AppState>, 'state' | 'rootState'>
+} & Exclude<ActionContext<State, AppState>, 'commit' | 'dispatch' | 'getters' | 'rootGetters'>
 
 export type Actions = {
     exampleActions({ commit }: AugmentedActionContext, payload: string): Promise<number>

@@ -1,9 +1,10 @@
-exports.notEmpty = name => {
+exports.validName = name => {
     return v => {
         if (!v || v.trim === '') {
             return `${name} is required`
-        } else {
-            return true
+        } else if (/^\d/.test(v)) {
+            return `${name} can't startsWith number`
         }
+        return true
     }
 }

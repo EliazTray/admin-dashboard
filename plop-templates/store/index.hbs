@@ -1,15 +1,83 @@
-{{#if state}}
-const state = {}
-{{/if}}
+import { MutationTree, GetterTree, ActionContext, ActionTree } from 'vuex'
+import { AppState, AppGetters, AppActions } from './types'
+import log from '@/utils/logger'
 
-{{#if mutations}}
-const mutations = {}
-{{/if}}
+const namespaceDebug = '{{name}}State:'
+const {{name}}StateDebug = log.extend(namespaceDebug)
 
-{{#if actions}}
-const actions = {}
-{{/if}}
-
-export default {
-{{options}}
+/**
+ * state 结构比较简单，通常可以先定义，再通过 typeof 拿到类型定义
+ */
+const state = {
+    // counter: 1
 }
+
+export type State = typeof state
+
+// 增强的 actionContext 类型定义
+type AugmentedActionContext = {
+    commit<K extends keyof Mutations>(key: K, payload: Parameters<Mutations[K]>[1]): ReturnType<Mutations[K]>
+    dispatch<K extends keyof AppActions>(key: K, payload: Parameters<AppActions[K]>[1]): ReturnType<AppActions[K]>
+    getters: {
+        [K in keyof Getters]: ReturnType<Getters[K]>
+    }
+    rootGetters: {
+        [K in keyof AppGetters]: ReturnType<AppGetters[K]>
+    }
+} & Exclude<ActionContext<State, AppState>, 'commit' | 'dispatch' | 'getters' | 'rootGetters'>
+
+
+/**
+ * 模块的 action 定义
+ */
+export type Actions = {
+    // {{name}}Actions(actionContext: AugmentedActionContext, payload: number): Promise<number>
+}
+
+const actions: ActionTree<State, AppState> & Actions = {
+    // async {{name}}Actions({ commit, dispatch, getters, rootGetters, rootState }) {
+    //     await dispatch('exampleActions', 'haha')
+    //     return Promise.resolve(Math.random())
+    // }
+}
+
+/**
+ *  当前模块的 mutation 定义
+ */
+
+export type Mutations<S = State> = {
+    // ['{{name}}Mutaions'](state: S, payload: number): void
+}
+
+const mutations: MutationTree<State> & Mutations = {
+    // ['{{name}}Mutaions'](state, payload: number) {
+    //     state.counter = payload
+    // }
+}
+
+/**
+ * 当前模块的 getters 定义
+ */
+export type Getters = {
+    // {{name}}Counters(state: State, getters: Getters, rootState: AppState, rootGetters: AppGetters): number
+    // {{name}}CoutersDouble(state: State): number
+}
+
+const getters: GetterTree<State, AppState> & Getters = {
+    // {{name}}Counters: (state, getters, rootState, rootGetters) => {
+    //     {{name}}StateDebug(state, getters, rootState, rootGetters)
+    //     return state.counter
+    // },
+    // {{name}}CoutersDouble(state: State) {
+    //     return state.counter * 2
+    // }
+}
+
+const {{name}} = {
+    state,
+    mutations,
+    actions,
+    getters
+}
+
+export default {{name}}

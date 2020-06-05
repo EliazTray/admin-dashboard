@@ -24,7 +24,7 @@ type AugmentedActionContext = {
     rootGetters: {
         [K in keyof AppGetters]: ReturnType<AppGetters[K]>
     }
-} & Pick<ActionContext<State, AppState>, 'state' | 'rootState'>
+} & Exclude<ActionContext<State, AppState>, 'commit' | 'dispatch' | 'getters' | 'rootGetters'>
 
 /**
  * 模块的 action 定义
