@@ -2,17 +2,17 @@
 import { Component, Vue } from 'vue-property-decorator'
 
 @Component({
-  name: 'Redirect'
+    name: 'Redirect'
 })
 export default class extends Vue {
-  created() {
-    const { params, query } = this.$route
-    const { path } = params
-    this.$router.replace({ path: '/' + path, query })
-  }
+    created() {
+        const { params, query } = this.$route
+        const { path } = params
+        this.$router.replace({ path: '/' + path, query })
+    }
 
-  render() {
-    // Avoid warning for missing template
-  }
+    render() {
+        // Avoid warning for missing template
+    }
 }
 </script>

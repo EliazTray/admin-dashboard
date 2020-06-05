@@ -10,12 +10,12 @@ import { ISettingsState } from './modules/settings'
 Vue.use(Vuex)
 
 export interface IRootState {
-  app: IAppState
-  user: IUserState
-  tagsView: ITagsViewState
-  errorLog: IErrorLogState
-  permission: IPermissionState
-  settings: ISettingsState
+    app: IAppState
+    user: IUserState
+    tagsView: ITagsViewState
+    errorLog: IErrorLogState
+    permission: IPermissionState
+    settings: ISettingsState
 }
 
 // Declare empty store first, dynamically register all modules later.

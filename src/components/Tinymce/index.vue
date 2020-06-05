@@ -1,22 +1,10 @@
 <template>
-  <div
-    :class="{fullscreen: fullscreen}"
-    class="tinymce-container"
-    :style="{width: containerWidth}"
-  >
-    <tinymce-editor
-      :id="id"
-      v-model="tinymceContent"
-      :init="initOptions"
-    />
-    <div class="editor-custom-btn-container">
-      <editor-image-upload
-        :color="uploadButtonColor"
-        class="editor-upload-btn"
-        @successCBK="imageSuccessCBK"
-      />
+    <div :class="{ fullscreen: fullscreen }" class="tinymce-container" :style="{ width: containerWidth }">
+        <tinymce-editor :id="id" v-model="tinymceContent" :init="initOptions" />
+        <div class="editor-custom-btn-container">
+            <editor-image-upload :color="uploadButtonColor" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
+        </div>
     </div>
-  </div>
 </template>
 
 <script lang="ts">
@@ -67,152 +55,152 @@ import { plugins, toolbar } from './config'
 const defaultId = () => 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
 
 @Component({
-  name: 'Tinymce',
-  components: {
-    EditorImageUpload,
-    TinymceEditor
-  }
+    name: 'Tinymce',
+    components: {
+        EditorImageUpload,
+        TinymceEditor
+    }
 })
 export default class extends Vue {
-  @Prop({ required: true }) private value!: string
-  @Prop({ default: defaultId }) private id!: string
-  @Prop({ default: () => [] }) private toolbar!: string[]
-  @Prop({ default: 'file edit insert view format table' }) private menubar!: string
-  @Prop({ default: '360px' }) private height!: string | number
-  @Prop({ default: 'auto' }) private width!: string | number
+    @Prop({ required: true }) private value!: string
+    @Prop({ default: defaultId }) private id!: string
+    @Prop({ default: () => [] }) private toolbar!: string[]
+    @Prop({ default: 'file edit insert view format table' }) private menubar!: string
+    @Prop({ default: '360px' }) private height!: string | number
+    @Prop({ default: 'auto' }) private width!: string | number
 
-  private hasChange = false
-  private hasInit = false
-  private fullscreen = false
-  // https://www.tiny.cloud/docs/configure/localization/#language
-  // and also see langs files under public/tinymce/langs folder
-  private languageTypeList: { [key: string]: string } = {
-    en: 'en',
-    zh: 'zh_CN',
-    es: 'es',
-    ja: 'ja',
-    ko: 'ko_KR'
-  }
-
-  get language() {
-    return this.languageTypeList[AppModule.language]
-  }
-
-  get uploadButtonColor() {
-    return SettingsModule.theme
-  }
-
-  get tinymceContent() {
-    return this.value
-  }
-
-  set tinymceContent(value) {
-    this.$emit('input', value)
-  }
-
-  get containerWidth() {
-    const width = this.width
-    // Test matches `100`, `'100'`
-    if (/^[\d]+(\.[\d]+)?$/.test(width.toString())) {
-      return `${width}px`
+    private hasChange = false
+    private hasInit = false
+    private fullscreen = false
+    // https://www.tiny.cloud/docs/configure/localization/#language
+    // and also see langs files under public/tinymce/langs folder
+    private languageTypeList: { [key: string]: string } = {
+        en: 'en',
+        zh: 'zh_CN',
+        es: 'es',
+        ja: 'ja',
+        ko: 'ko_KR'
     }
-    return width
-  }
 
-  get initOptions() {
-    return {
-      selector: `#${this.id}`,
-      height: this.height,
-      body_class: 'panel-body ',
-      object_resizing: false,
-      toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
-      menubar: this.menubar,
-      plugins: plugins,
-      language: this.language,
-      language_url: this.language === 'en' ? '' : `${process.env.BASE_URL}tinymce/langs/${this.language}.js`,
-      skin_url: `${process.env.BASE_URL}tinymce/skins/`,
-      emoticons_database_url: `${process.env.BASE_URL}tinymce/emojis.min.js`,
-      end_container_on_empty_block: true,
-      powerpaste_word_import: 'clean',
-      code_dialog_height: 450,
-      code_dialog_width: 1000,
-      advlist_bullet_styles: 'square',
-      advlist_number_styles: 'default',
-      imagetools_cors_hosts: ['www.tinymce.com', 'codepen.io'],
-      default_link_target: '_blank',
-      link_title: false,
-      // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
-      nonbreaking_force_tab: true,
-      // https://www.tiny.cloud/docs-3x/reference/configuration/Configuration3x@convert_urls/
-      // https://stackoverflow.com/questions/5196205/disable-tinymce-absolute-to-relative-url-conversions
-      convert_urls: false,
-      init_instance_callback: (editor: any) => {
-        if (this.value) {
-          editor.setContent(this.value)
+    get language() {
+        return this.languageTypeList[AppModule.language]
+    }
+
+    get uploadButtonColor() {
+        return SettingsModule.theme
+    }
+
+    get tinymceContent() {
+        return this.value
+    }
+
+    set tinymceContent(value) {
+        this.$emit('input', value)
+    }
+
+    get containerWidth() {
+        const width = this.width
+        // Test matches `100`, `'100'`
+        if (/^[\d]+(\.[\d]+)?$/.test(width.toString())) {
+            return `${width}px`
         }
-        this.hasInit = true
-        editor.on('NodeChange Change KeyUp SetContent', () => {
-          this.hasChange = true
-          this.$emit('input', editor.getContent())
-        })
-      },
-      setup: (editor: any) => {
-        editor.on('FullscreenStateChanged', (e: any) => {
-          this.fullscreen = e.state
-        })
-      }
+        return width
     }
-  }
 
-  @Watch('language')
-  private onLanguageChange() {
-    const tinymceManager = (window as any).tinymce
-    const tinymceInstance = tinymceManager.get(this.id)
-    if (this.fullscreen) {
-      tinymceInstance.execCommand('mceFullScreen')
+    get initOptions() {
+        return {
+            selector: `#${this.id}`,
+            height: this.height,
+            body_class: 'panel-body ',
+            object_resizing: false,
+            toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
+            menubar: this.menubar,
+            plugins: plugins,
+            language: this.language,
+            language_url: this.language === 'en' ? '' : `${process.env.BASE_URL}tinymce/langs/${this.language}.js`,
+            skin_url: `${process.env.BASE_URL}tinymce/skins/`,
+            emoticons_database_url: `${process.env.BASE_URL}tinymce/emojis.min.js`,
+            end_container_on_empty_block: true,
+            powerpaste_word_import: 'clean',
+            code_dialog_height: 450,
+            code_dialog_width: 1000,
+            advlist_bullet_styles: 'square',
+            advlist_number_styles: 'default',
+            imagetools_cors_hosts: ['www.tinymce.com', 'codepen.io'],
+            default_link_target: '_blank',
+            link_title: false,
+            // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
+            nonbreaking_force_tab: true,
+            // https://www.tiny.cloud/docs-3x/reference/configuration/Configuration3x@convert_urls/
+            // https://stackoverflow.com/questions/5196205/disable-tinymce-absolute-to-relative-url-conversions
+            convert_urls: false,
+            init_instance_callback: (editor: any) => {
+                if (this.value) {
+                    editor.setContent(this.value)
+                }
+                this.hasInit = true
+                editor.on('NodeChange Change KeyUp SetContent', () => {
+                    this.hasChange = true
+                    this.$emit('input', editor.getContent())
+                })
+            },
+            setup: (editor: any) => {
+                editor.on('FullscreenStateChanged', (e: any) => {
+                    this.fullscreen = e.state
+                })
+            }
+        }
     }
-    if (tinymceInstance) {
-      tinymceInstance.destroy()
-    }
-    this.$nextTick(() => tinymceManager.init(this.initOptions))
-  }
 
-  private imageSuccessCBK(arr: IUploadObject[]) {
-    const tinymce = (window as any).tinymce.get(this.id)
-    arr.forEach(v => {
-      tinymce.insertContent(`<img class="wscnph" src="${v.url}" >`)
-    })
-  }
+    @Watch('language')
+    private onLanguageChange() {
+        const tinymceManager = (window as any).tinymce
+        const tinymceInstance = tinymceManager.get(this.id)
+        if (this.fullscreen) {
+            tinymceInstance.execCommand('mceFullScreen')
+        }
+        if (tinymceInstance) {
+            tinymceInstance.destroy()
+        }
+        this.$nextTick(() => tinymceManager.init(this.initOptions))
+    }
+
+    private imageSuccessCBK(arr: IUploadObject[]) {
+        const tinymce = (window as any).tinymce.get(this.id)
+        arr.forEach(v => {
+            tinymce.insertContent(`<img class="wscnph" src="${v.url}" >`)
+        })
+    }
 }
 </script>
 
 <style lang="scss" scoped>
 .tinymce-container {
-  position: relative;
-  line-height: normal;
+    position: relative;
+    line-height: normal;
 
-  .mce-fullscreen {
-    z-index: 10000;
-  }
+    .mce-fullscreen {
+        z-index: 10000;
+    }
 }
 
 .editor-custom-btn-container {
-  position: absolute;
-  right: 6px;
-  top: 6px;
+    position: absolute;
+    right: 6px;
+    top: 6px;
 
-  &.fullscreen {
-    z-index: 10000;
-    position: fixed;
-  }
+    &.fullscreen {
+        z-index: 10000;
+        position: fixed;
+    }
 }
 
 .editor-upload-btn {
-  display: inline-block;
+    display: inline-block;
 }
 
 textarea {
-  visibility: hidden;
-  z-index: -1;
+    visibility: hidden;
+    z-index: -1;
 }
 </style>
