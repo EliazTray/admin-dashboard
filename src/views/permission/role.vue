@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
         <el-button type="primary" @click="handleCreateRole">
-            {{ $t('permission.createRole') }}
+            {{ 'permission.createRole' }}
         </el-button>
 
         <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
@@ -23,10 +23,10 @@
             <el-table-column align="center" label="Operations">
                 <template slot-scope="scope">
                     <el-button type="primary" size="small" @click="handleEdit(scope)">
-                        {{ $t('permission.editPermission') }}
+                        {{ 'permission.editPermission' }}
                     </el-button>
                     <el-button type="danger" size="small" @click="handleDelete(scope)">
-                        {{ $t('permission.delete') }}
+                        {{ 'permission.delete' }}
                     </el-button>
                 </template>
             </el-table-column>
@@ -59,10 +59,10 @@
             </el-form>
             <div style="text-align:right;">
                 <el-button type="danger" @click="dialogVisible = false">
-                    {{ $t('permission.cancel') }}
+                    {{ 'permission.cancel' }}
                 </el-button>
                 <el-button type="primary" @click="confirmRole">
-                    {{ $t('permission.confirm') }}
+                    {{ 'permission.confirm' }}
                 </el-button>
             </div>
         </el-dialog>
@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import path from 'path'
-import { cloneDeep } from 'lodash'
+import cloneDeep from 'lodash-es/cloneDeep'
 import { Component, Vue } from 'vue-property-decorator'
 import { RouteConfig } from 'vue-router'
 import { Tree } from 'element-ui'
@@ -146,7 +146,7 @@ export default class extends Vue {
                 title: '',
                 path: ''
             }
-            tmp.title = this.$t(`route.${route.meta.title}`).toString()
+            tmp.title = `route.${route.meta.title}`
             tmp.path = route.path
             if (route.children) {
                 tmp.children = this.generateTreeData(route.children)

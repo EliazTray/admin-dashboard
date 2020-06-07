@@ -22,9 +22,7 @@ import path from 'path'
 import Fuse from 'fuse.js' // A lightweight fuzzy-search module
 import { Component, Vue, Watch } from 'vue-property-decorator'
 import { RouteConfig } from 'vue-router'
-import { AppModule } from '@/store/modules/app'
 import { PermissionModule } from '@/store/modules/permission'
-import i18n from '@/lang' // Internationalization
 
 @Component({
     name: 'HeaderSearch'
@@ -38,10 +36,6 @@ export default class extends Vue {
 
     get routes() {
         return PermissionModule.routes
-    }
-
-    get lang() {
-        return AppModule.language
     }
 
     @Watch('lang')
@@ -135,7 +129,7 @@ export default class extends Vue {
 
             if (router.meta && router.meta.title) {
                 // generate internationalized title
-                const i18ntitle = i18n.t(`route.${router.meta.title}`).toString()
+                const i18ntitle = `route.${router.meta.title}`
                 data.meta.title = [...data.meta.title, i18ntitle]
                 if (router.redirect !== 'noRedirect') {
                     // only push the routes with title

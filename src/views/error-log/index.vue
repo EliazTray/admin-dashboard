@@ -2,15 +2,15 @@
     <div class="errPage-container">
         <error-a />
         <error-b />
-        <h3>{{ $t('errorLog.tips') }}</h3>
+        <h3>{{ 'errorLog.tips' }}</h3>
         <aside>
-            {{ $t('errorLog.description') }}
+            {{ 'errorLog.description' }}
             <a
                 target="_blank"
                 class="link-type"
                 href="https://armour.github.io/vue-typescript-admin-docs/guide/advanced/error.html"
             >
-                {{ $t('errorLog.documentation') }}
+                {{ 'errorLog.documentation' }}
             </a>
         </aside>
         <a href="#">
