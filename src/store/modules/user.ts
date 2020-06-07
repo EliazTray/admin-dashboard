@@ -1,10 +1,39 @@
 import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-decorators'
-import { login, logout, getUserInfo } from '@/api/users'
 import { getToken, setToken, removeToken } from '@/utils/cookies'
 import router, { resetRouter } from '@/router'
 import { PermissionModule } from './permission'
 import { TagsViewModule } from './tags-view'
 import store from '@/store'
+
+type LoginData = {
+    username: string
+    password: string
+}
+
+const login = ({ username, password }: LoginData) =>
+    Promise.resolve({
+        code: 20000,
+        data: {
+            accessToken: username + '-token-' + password
+        }
+    })
+const logout = () => Promise.resolve()
+const getUserInfo = () =>
+    Promise.resolve({
+        data: {
+            user: {
+                id: 0,
+                username: 'admin',
+                password: 'any',
+                name: 'Super Admin',
+                avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+                introduction: 'I am a super administrator',
+                email: 'admin@test.com',
+                phone: '1234567890',
+                roles: ['admin']
+            }
+        }
+    })
 
 export interface IUserState {
     token: string
@@ -76,9 +105,7 @@ class User extends VuexModule implements IUserState {
         if (this.token === '') {
             throw Error('GetUserInfo: token is undefined!')
         }
-        const { data } = await getUserInfo({
-            /* Your params here */
-        })
+        const { data } = await getUserInfo()
         if (!data) {
             throw Error('Verification failed, please Login again.')
         }
